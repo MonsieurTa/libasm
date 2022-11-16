@@ -1,4 +1,5 @@
 NAME = libasm.a
+TEST_NAME = ft_test
 CC=gcc
 FLAGS= -Wall -Werror -Wextra
 SRC = ft_strlen.s
@@ -14,17 +15,18 @@ $(NAME): $(OBJ)
 
 test: $(NAME)
 	$(CC) $(FLAGS) -I. main.c -L. -lasm -o ft_test
+	./ft_test
 
 clean_test:
 	/bin/rm -rf main.o
 
 fclean_test:
-	/bin/rm -rf ft_test
+	/bin/rm -rf $(TEST_NAME)
 
 clean: clean_test
 	/bin/rm -rf $(OBJ)
 
-fclean: clean
+fclean: clean fclean_test
 	/bin/rm -f $(NAME)
 
 re: fclean all
