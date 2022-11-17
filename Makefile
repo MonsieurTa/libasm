@@ -2,7 +2,7 @@ NAME = libasm.a
 TEST_NAME = ft_test
 CC=gcc
 FLAGS= -Wall -Werror -Wextra
-SRC = ft_strlen.s
+SRC = ft_strlen.s ft_strcpy.s
 OBJ = $(SRC:.s=.o)
 
 all: $(NAME)
@@ -14,7 +14,7 @@ $(NAME): $(OBJ)
 	nasm -felf64 $<
 
 test: $(NAME)
-	$(CC) $(FLAGS) -I. main.c -L. -lasm -o ft_test
+	$(CC) $(FLAGS) -I. main.c -L. -lasm -o $(TEST_NAME)
 	./ft_test
 
 clean_test:
