@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <string.h>
 
 #include "libasm.h"
@@ -19,11 +20,11 @@ void _test(char *test_name, char *filepath, void (*test_fn)(char*, int, int*, in
   int passed = 0;
   int failed = 0;
   while ((read = getline(&line, &len, fp)) != -1) {
-    test_fn(line, len, &passed, &failed);
+    test_fn(line, read, &passed, &failed);
     free(line);
     line = NULL;
   }
-
+  close(fileno(fp));
   printf("%d passed, %d failed\n", passed, failed);
 }
 
@@ -81,9 +82,41 @@ void test_strcmp(char *line, int len, int *passed, int *failed) {
   }
 }
 
+void test_write(char *line, int len, int *passed, int *failed) {
+  FILE *tmp_fd1 = tmpfile();
+  FILE *tmp_fd2 = tmpfile();
+
+  int expected = write(fileno(tmp_fd1), line, len);
+  int actual = ft_write(fileno(tmp_fd2), line, len);
+
+  if (expected != actual) {
+    printf("expected %d, got %d\n", expected, actual);
+    *failed += 1;
+    return;
+  }
+
+  char *buffer1 = NULL;
+  char *buffer2 = NULL;
+  size_t len1;
+  size_t len2;
+
+  getdelim(&buffer1, &len1, '\0', tmp_fd1);
+  getdelim(&buffer2, &len2, '\0', tmp_fd2);
+
+  int diff = strcmp(buffer1, buffer2);
+  if (diff != 0) {
+    printf("got diff");
+    *failed += 1;
+    return;
+  }
+
+  *passed += 1;
+}
+
 int main () {
   _test("ft_strlen", "./tests/assets/test_strlen", test_strlen);
   _test("ft_strcpy", "./tests/assets/test_strcpy", test_strcpy);
   _test("ft_strcmp", "./tests/assets/test_strcmp", test_strcmp);
+  _test("ft_write", "./tests/assets/test_write", test_write);
   return (0);
 }
