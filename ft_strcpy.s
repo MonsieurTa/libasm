@@ -3,15 +3,12 @@ extern ft_strlen
 global ft_strcpy
 
 ft_strcpy:
-  push rbp
-  mov rbp, rsp
-
   push rdi
 
   mov rdi, rsi
   call ft_strlen
 
-  mov rdi, [rbp-8]  ; retrieve rdi. mov rdi, [rsp] is equivalent
+  mov rdi, [rsp]
   push rsi
   inc rax           ; include \0
 
@@ -32,6 +29,5 @@ loop:
 exit:
   pop rsi
   pop rdi
-  pop rbp
   mov rax, rdi
   ret

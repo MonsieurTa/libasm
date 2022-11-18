@@ -2,9 +2,6 @@ section .text
 global  ft_strlen
 
 ft_strlen:
-  push rbp
-  mov rbp, rsp
-
   push rbx
   mov rax, 0
   mov rbx, rdi
@@ -21,5 +18,4 @@ redo:
 
 exit:
   pop rbx
-  pop rbp
   ret

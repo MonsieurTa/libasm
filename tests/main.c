@@ -1,3 +1,4 @@
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -28,7 +29,7 @@ void _test(char *test_name, char *filepath, void (*test_fn)(char*, int, int*, in
   printf("%d passed, %d failed\n", passed, failed);
 }
 
-void test_strlen(char *line, int len, int *passed, int *failed) {
+void test_line_strlen(char *line, int len, int *passed, int *failed) {
   (void)len;
 
   int expected = strlen(line);
@@ -42,7 +43,7 @@ void test_strlen(char *line, int len, int *passed, int *failed) {
   }
 }
 
-void test_strcpy(char *line, int len, int *passed, int *failed) {
+void test_line_strcpy(char *line, int len, int *passed, int *failed) {
   char *dst1 = malloc(sizeof(char) * (len + 1));
   char *dst2 = malloc(sizeof(char) * (len + 1));
 
@@ -60,7 +61,7 @@ void test_strcpy(char *line, int len, int *passed, int *failed) {
   free(dst2);
 }
 
-void test_strcmp(char *line, int len, int *passed, int *failed) {
+void test_line_strcmp(char *line, int len, int *passed, int *failed) {
   (void)len;
   char *str1 = NULL;
   char *str2 = NULL;
@@ -82,7 +83,7 @@ void test_strcmp(char *line, int len, int *passed, int *failed) {
   }
 }
 
-void test_write(char *line, int len, int *passed, int *failed) {
+void test_line_write(char *line, int len, int *passed, int *failed) {
   FILE *tmp_fd1 = tmpfile();
   FILE *tmp_fd2 = tmpfile();
 
@@ -111,12 +112,83 @@ void test_write(char *line, int len, int *passed, int *failed) {
   }
 
   *passed += 1;
+  close(fileno(tmp_fd1));
+  close(fileno(tmp_fd2));
+}
+
+void test_write() {
+  _test("ft_write", "./tests/assets/test_read_write", test_line_write);
+
+  printf("--- Testing ft_write#errno ---\n");
+  int passed = 0;
+  int failed = 0;
+
+  write(-1, NULL, 0);
+  int expected = errno;
+  ft_write(-1, NULL, 0);
+  int actual = errno;
+  if (expected != actual) {
+    failed += 1;
+  } else {
+    passed += 1;
+  }
+  printf("%d passed, %d failed\n", passed, failed);
+}
+
+void test_read() {
+  FILE    *fp1;
+  FILE    *fp2;
+  char    buffer[43];
+  int     passed = 0;
+  int     failed = 0;
+  int     expected;
+  int     actual;
+
+  printf("--- Testing ft_read ---\n");
+  fp1 = fopen("./tests/assets/test_read_write", "r");
+  fp2 = fopen("./tests/assets/test_read_write", "r");
+  if (fp1 == NULL || fp2 == NULL) {
+    exit(EXIT_FAILURE);
+  }
+
+  buffer[42] = 0;
+
+  while ((expected = read(fileno(fp1), buffer, 42)) > 0
+  && (actual = ft_read(fileno(fp2), buffer, 42)) > 0) {
+    if (expected != actual) {
+      printf("expected: %d, got: %d\n", expected, actual);
+      failed += 1;
+    } else {
+      passed += 1;
+    }
+  }
+  printf("%d passed, %d failed\n", passed, failed);
+
+  printf("--- Testing ft_read#errno ---\n");
+  passed = 0;
+  failed = 0;
+
+  read(-1, buffer, 42);
+  expected = errno;
+  ft_read(-1, buffer, 42);
+  actual = errno;
+  if (expected != actual) {
+    printf("expected: %d, got: %d\n", expected, actual);
+    failed += 1;
+  } else {
+    passed += 1;
+  }
+
+  close(fileno(fp1));
+  close(fileno(fp2));
+  printf("%d passed, %d failed\n", passed, failed);
 }
 
 int main () {
-  _test("ft_strlen", "./tests/assets/test_strlen", test_strlen);
-  _test("ft_strcpy", "./tests/assets/test_strcpy", test_strcpy);
-  _test("ft_strcmp", "./tests/assets/test_strcmp", test_strcmp);
-  _test("ft_write", "./tests/assets/test_write", test_write);
+  _test("ft_strlen", "./tests/assets/test_strlen", test_line_strlen);
+  _test("ft_strcpy", "./tests/assets/test_strcpy", test_line_strcpy);
+  _test("ft_strcmp", "./tests/assets/test_strcmp", test_line_strcmp);
+  test_write();
+  test_read();
   return (0);
 }

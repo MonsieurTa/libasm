@@ -3,9 +3,6 @@ global ft_strcmp
 
 ; rdi, rsi
 ft_strcmp:
-  push rbp
-  mov rbp, rsp
-
   push rdi
   push rsi
   mov rax, 0x0
@@ -30,5 +27,4 @@ exit:
 
   pop rsi
   pop rdi
-  pop rbp
   ret

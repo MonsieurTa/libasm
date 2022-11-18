@@ -2,7 +2,7 @@ NAME = libasm.a
 TEST_NAME = ft_test
 CC=gcc
 FLAGS= -Wall -Werror -Wextra
-SRC = ft_strlen.s ft_strcpy.s ft_strcmp.s ft_write.s
+SRC = ft_strlen.s ft_strcpy.s ft_strcmp.s ft_write.s ft_read.s
 OBJ = $(SRC:.s=.o)
 
 all: $(NAME)
