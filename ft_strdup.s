@@ -18,7 +18,7 @@ ft_strdup:
 
   mov rdi, rax
   pop rsi
-  call ft_strcpy
+  call ft_strcpy ; can be optimized by using strncpy, but whatever
 
   mov rdi, rsi
   pop rsi

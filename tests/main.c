@@ -200,12 +200,43 @@ void test_line_strdup(char *line, int len, int *passed, int *failed) {
   free(actual);
 }
 
+void test_atoi_base() {
+  int expected;
+  int actual;
+
+  // expected = 0;
+  // actual = ft_atoi_base(" \f\n\r\t\v", 10);
+
+  // printf("expected %d, got %d\n", expected, actual);
+
+  expected = 4;
+  actual = ft_atoi_base("4", 10);
+  printf("expected %d, got %d\n", expected, actual);
+
+  expected = 10;
+  actual = ft_atoi_base("A", 16);
+  printf("expected %d, got %d\n", expected, actual);
+  actual = ft_atoi_base("a", 16);
+  printf("expected %d, got %d\n", expected, actual);
+
+  expected = 2;
+  actual = ft_atoi_base("10", 2);
+  printf("expected %d, got %d\n", expected, actual);
+
+  expected = 2048;
+  actual = ft_atoi_base("2048", 10);
+  printf("expected %d, got %d\n", expected, actual);
+  actual = ft_atoi_base("800", 16);
+  printf("expected %d, got %d\n", expected, actual);
+}
+
 int main () {
   // _test("ft_strlen", "./tests/assets/test_strlen", test_line_strlen);
   // _test("ft_strcpy", "./tests/assets/test_strcpy", test_line_strcpy);
   // _test("ft_strcmp", "./tests/assets/test_strcmp", test_line_strcmp);
   // test_write();
   // test_read();
-  _test("ft_strdup", "./tests/assets/test_read_write", test_line_strdup);
+  // _test("ft_strdup", "./tests/assets/test_read_write", test_line_strdup);
+  test_atoi_base();
   return (0);
 }
