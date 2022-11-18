@@ -184,11 +184,28 @@ void test_read() {
   printf("%d passed, %d failed\n", passed, failed);
 }
 
+void test_line_strdup(char *line, int len, int *passed, int *failed) {
+  (void)len;
+  char *expected = strdup(line);
+  char *actual = ft_strdup(line);
+
+  if (strcmp(expected, actual) != 0) {
+    printf("expected %s, got %s\n", expected, actual);
+    *failed += 1;
+  } else {
+    *passed += 1;
+  }
+
+  free(expected);
+  free(actual);
+}
+
 int main () {
-  _test("ft_strlen", "./tests/assets/test_strlen", test_line_strlen);
-  _test("ft_strcpy", "./tests/assets/test_strcpy", test_line_strcpy);
-  _test("ft_strcmp", "./tests/assets/test_strcmp", test_line_strcmp);
-  test_write();
-  test_read();
+  // _test("ft_strlen", "./tests/assets/test_strlen", test_line_strlen);
+  // _test("ft_strcpy", "./tests/assets/test_strcpy", test_line_strcpy);
+  // _test("ft_strcmp", "./tests/assets/test_strcmp", test_line_strcmp);
+  // test_write();
+  // test_read();
+  _test("ft_strdup", "./tests/assets/test_read_write", test_line_strdup);
   return (0);
 }
