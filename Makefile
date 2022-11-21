@@ -21,6 +21,7 @@ tests/test_strdup.c \
 tests/test_atoi_base.c
 
 OBJ = $(SRC:.s=.o)
+TEST_OBJ = $(TEST_SRC:.c=.o)
 
 all: $(NAME)
 
@@ -30,12 +31,15 @@ $(NAME): $(OBJ)
 %.o: %.s
 	nasm -felf64 $<
 
-test: $(NAME)
-	$(CC) $(FLAGS) -I. -I./tests $(TEST_SRC) -L. -lasm -o $(TEST_NAME)
-	./ft_test
+tests/%.o: tests/%.c
+	$(CC) $(FLAGS) -I. -I./tests -c -o $@ $<
+
+test: $(NAME) $(TEST_OBJ)
+	$(CC) $(FLAGS) -o $(TEST_NAME) $(TEST_OBJ) $(NAME)
+	./$(TEST_NAME)
 
 clean_test:
-	/bin/rm -rf main.o
+	/bin/rm -rf $(TEST_OBJ)
 
 fclean_test:
 	/bin/rm -rf $(TEST_NAME)
