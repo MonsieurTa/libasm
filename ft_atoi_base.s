@@ -41,15 +41,21 @@ parse_digit:
   mov rcx, [rsp-32]
 
   mov r10b, [rcx]
-  sub r10b, 0x30;     ; check if " "
+  sub r10b, 0x30;     ; check if "0"
+  cmp r10b, 0x0
+  jl exit
   cmp r10b, [rsp-16]
   jl add_digit
 
   sub r10b, 0x7       ; check if "A"
+  cmp r10b, 0xa
+  jl exit
   cmp r10b, [rsp-16]
   jl add_digit
 
   sub r10b, 0x20      ; check if "a"
+  cmp r10b, 0xa
+  jl exit
   cmp r10b, [rsp-16]
   jl add_digit
 
