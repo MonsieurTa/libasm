@@ -10,6 +10,16 @@ ft_read.s \
 ft_strdup.s \
 ft_atoi_base.s
 
+TEST_SRC = tests/main.c \
+tests/test_base.c \
+tests/test_strlen.c \
+tests/test_strcpy.c \
+tests/test_strcmp.c \
+tests/test_write.c \
+tests/test_read.c \
+tests/test_strdup.c \
+tests/test_atoi_base.c
+
 OBJ = $(SRC:.s=.o)
 
 all: $(NAME)
@@ -21,7 +31,7 @@ $(NAME): $(OBJ)
 	nasm -felf64 $<
 
 test: $(NAME)
-	$(CC) $(FLAGS) -I. ./tests/main.c -L. -lasm -o $(TEST_NAME)
+	$(CC) $(FLAGS) -I. -I./tests $(TEST_SRC) -L. -lasm -o $(TEST_NAME)
 	./ft_test
 
 clean_test:

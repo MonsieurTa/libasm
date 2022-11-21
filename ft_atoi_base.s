@@ -5,10 +5,11 @@ global ft_atoi_base
 section .text
 
 ft_atoi_base:
-  sub rsp, 32
+  xor rax, rax
+  sub rsp, 33
+  mov byte [rsp-33], 0x0 ; sign
   mov [rsp-32], rdi ; str
   mov [rsp-16], rsi ; str_base
-  xor rax, rax
 
   jmp trim_whitespace
 
@@ -17,24 +18,39 @@ trim_whitespace:
   mov rcx, [rsp-32]
   mov r10b, [rcx]
 
-  cmp byte r10b, 0x20 ; " "
+  cmp r10b, 0x20 ; " "
   je trim
-  cmp byte r10b, 0xc  ; "\f"
+  cmp r10b, 0xc  ; "\f"
   je trim
-  cmp byte r10b, 0xa  ; "\n"
+  cmp r10b, 0xa  ; "\n"
   je trim
-  cmp byte r10b, 0xd  ; "\r"
+  cmp r10b, 0xd  ; "\r"
   je trim
-  cmp byte r10b, 0x9  ; "\t"
+  cmp r10b, 0x9  ; "\t"
   je trim
-  cmp byte r10b, 0xb  ; "\v"
+  cmp r10b, 0xb  ; "\v"
   je trim
 
-  jmp parse_digit
+  jmp parse_plus_sign
 
 trim:
   inc qword [rsp-32]
   jmp trim_whitespace
+
+parse_plus_sign:
+  cmp r10b, 0x2b  ; "+"
+  jne parse_neg_sign
+
+  inc qword [rsp-32]
+  jmp parse_digit
+
+parse_neg_sign:
+  cmp r10b, 0x2d  ; "-"
+  jne parse_digit
+
+  mov byte [rsp-33], 1
+  inc qword [rsp-32]
+  jmp parse_digit
 
 parse_digit:
   xor r10, r10
@@ -75,7 +91,19 @@ redo:
 
   jmp parse_digit
 
+apply_neg:
+  xor r10, r10
+  mov r10b, [rsp-33]
+  neg r10
+  mul r10
+
+  mov byte [rsp-33], 0x0
+  jmp exit
+
 exit:
+  cmp byte [rsp-33], 0x0  ; is it positive?
+  jne apply_neg
+
   mov rdi, [rsp-32]
-  add rsp, 32
+  add rsp, 33
   ret
