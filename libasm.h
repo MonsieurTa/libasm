@@ -14,3 +14,4 @@ extern ssize_t    ft_read(int fd, void *buf, size_t count);
 extern char       *ft_strdup(const char *s);
 extern int        ft_atoi_base(const char *str, int str_base);
 extern void       ft_list_push_front(t_list **lst, t_list *new);
+extern int        ft_list_size(t_list *lst);

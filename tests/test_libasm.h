@@ -7,3 +7,4 @@ void test_read();
 void test_line_strdup(char *line, int len, int *passed, int *failed);
 void test_atoi_base();
 void test_list_push_front();
+void test_list_size();

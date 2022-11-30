@@ -3,20 +3,7 @@
 
 #include "libasm.h"
 
-t_list  *create_node(void *data) {
-  t_list *node = (t_list*)malloc(sizeof(void*) + sizeof(t_list*));
-  node->data = data;
-  node->next = NULL;
-  return node;
-}
-
-void print_node(t_list *node) {
-  if (node == NULL) return;
-
-  printf("ptr: %p\n", node);
-  printf("data: %d\n", *(uint*)&node->data);
-  printf("next: %p\n", node->next);
-}
+t_list  *create_node(void *data);
 
 void test_list_push_front() {
   t_list *lst = NULL;
