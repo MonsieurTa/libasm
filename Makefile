@@ -8,7 +8,8 @@ ft_strcmp.s \
 ft_write.s \
 ft_read.s \
 ft_strdup.s \
-ft_atoi_base.s
+ft_atoi_base.s \
+ft_list_push_front.s
 
 TEST_SRC = tests/main.c \
 tests/test_base.c \
@@ -18,7 +19,8 @@ tests/test_strcmp.c \
 tests/test_write.c \
 tests/test_read.c \
 tests/test_strdup.c \
-tests/test_atoi_base.c
+tests/test_atoi_base.c \
+tests/test_list_push_front.c
 
 OBJ = $(SRC:.s=.o)
 TEST_OBJ = $(TEST_SRC:.c=.o)
